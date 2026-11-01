@@ -7,7 +7,8 @@
   // ==========================================
 
   const cfg = window.EROTICA_CONFIG || {};
-  const products = window.EROTICA_PRODUCTS || [];
+  let products = window.EROTICA_PRODUCTS || [];
+  const localProducts = [...products];
 
   const $ = (s, root = document) => root.querySelector(s);
   const $$ = (s, root = document) => [...root.querySelectorAll(s)];
@@ -113,10 +114,120 @@
   // ==========================================
 
   const findProduct = id =>
-    products.find(p => p.id === id);
+    products.find(p => String(p.id) === String(id));
 
   const isAvailable = p =>
     p && p.status === "available";
+
+  // ==========================================
+  // 5A. SUPABASE STOREFRONT CONNECTION
+  // ==========================================
+
+  function mapDatabaseProduct(row) {
+    return {
+      id: row.id,
+      name: row.name,
+      category: row.category,
+      price: row.price == null ? null : Number(row.price),
+      status: row.status || "available",
+      isNew: row.is_new === true,
+      description: row.description || "",
+      images: Array.isArray(row.images) ? row.images : [],
+      stockQuantity: row.stock_quantity ?? null,
+      reviews: []
+    };
+  }
+
+  async function loadSupabaseProducts() {
+    if (!window.supabaseClient) {
+      console.warn("Supabase client is unavailable. Using local products.");
+      return;
+    }
+
+    try {
+      const { data, error } = await window.supabaseClient
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      // Keep the local catalogue if the database is empty.
+      if (!data || data.length === 0) {
+        console.warn("No database products found. Using local catalogue.");
+        return;
+      }
+
+      products = data.map(mapDatabaseProduct);
+
+      await loadApprovedReviews();
+
+      renderCategories();
+      renderProducts();
+      renderBag();
+
+      // Refresh an open product modal if its product still exists.
+      if (currentProduct) {
+        const updatedProduct = findProduct(currentProduct.id);
+
+        if (updatedProduct) {
+          showProduct(updatedProduct.id);
+        } else {
+          closeProduct();
+        }
+      }
+
+      console.log("Storefront products loaded from Supabase.");
+
+    } catch (error) {
+      console.error(
+        "Could not load products from Supabase. Using local fallback:",
+        error
+      );
+
+      // Restore the local catalogue if this was the first load.
+      if (products !== localProducts && products.length === 0) {
+        products = localProducts;
+        renderCategories();
+        renderProducts();
+        renderBag();
+      }
+    }
+  }
+
+  // ==========================================
+  // 5B. APPROVED CUSTOMER REVIEWS
+  // ==========================================
+
+  async function loadApprovedReviews() {
+    try {
+      const { data, error } = await window.supabaseClient
+        .from("reviews")
+        .select("*")
+        .eq("status", "approved");
+
+      if (error) throw error;
+
+      products.forEach(product => {
+        product.reviews = (data || [])
+          .filter(review =>
+            String(review.product_id) === String(product.id)
+          )
+          .map(review => ({
+            approved: true,
+            name: review.customer_nam || "Customer",
+            rating: review.rating,
+            text: review.review_text || "",
+            date: review.created_at
+              ? new Date(review.created_at).toLocaleDateString("en-KE")
+              : ""
+          }));
+      });
+
+    } catch (error) {
+      console.warn("Approved reviews could not be loaded:", error);
+    }
+  }
 
   // ==========================================
   // 6. SHOPPING BAG
@@ -414,7 +525,7 @@
   // 9. PRODUCT DISPLAY
   // ==========================================
 
-  function productVisual(p, cls = "product-visual") {
+  const productVisual = (p, cls = "product-visual") => {
     const image = p.images?.[0];
 
     return image
@@ -429,7 +540,7 @@
              <br><small>PRODUCT PHOTOGRAPH</small>
            </span>
          </div>`;
-  }
+  };
 
   function renderProducts() {
     const list = visibleProducts();
@@ -1031,5 +1142,11 @@ Thank you!`;
   renderCategories();
   renderProducts();
   renderBag();
+
+  // Load the live catalogue from Supabase.
+  loadSupabaseProducts();
+
+  // Refresh products periodically while the page remains open.
+  setInterval(loadSupabaseProducts, 60000);
 
 })();
