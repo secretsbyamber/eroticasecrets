@@ -1,315 +1,135 @@
-<!DOCTYPE html>
-<html lang="en" class="dark">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EROTICASECRETS | Find Your Desire</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        plum: {
-                            900: '#1a0916',
-                            950: '#120510',
-                            800: '#2A1024',
-                            700: '#3B1533'
-                        },
-                        gold: {
-                            400: '#E5C158',
-                            500: '#D4AF37',
-                            600: '#B89728'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- Swiper.js for Image Carousels -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        h1, h2, h3, .brand-font { font-family: 'Cinzel', serif; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#321a28">
+  <meta name="description" content="EroticaSecrets — Find Your Desire. Discover intimate wellness essentials in a discreet, elegant shopping experience.">
+  <meta property="og:title" content="EroticaSecrets — Find Your Desire">
+  <meta property="og:description" content="A little mystery. A lot of self-discovery. Explore the collection.">
+  <meta property="og:type" content="website">
+  <title>EroticaSecrets — Find Your Desire</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-plum-950 text-neutral-100 min-h-screen pb-16 selection:bg-gold-500 selection:text-plum-950">
+<body>
+  <div class="announcement"><span>AN INVITATION TO DISCOVER</span><i></i><span>DISCREET · PERSONAL · YOURS</span></div>
 
-    <!-- Top Luxury Header -->
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-plum-950/80 border-b border-gold-500/20 px-4 py-3">
-        <div class="max-w-md mx-auto flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-gold-600 to-gold-400 flex items-center justify-center text-plum-950 font-bold shadow-lg shadow-gold-500/20">
-                    <i class="fa-solid fa-key text-xs"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold tracking-wider text-gold-400 leading-none">EROTICASECRETS</h1>
-                    <span class="text-[10px] tracking-widest text-neutral-400 uppercase">Find Your Desire</span>
-                </div>
-            </div>
-            <button onclick="openReviewsModal()" class="text-xs bg-plum-800 border border-gold-500/30 text-gold-400 px-3 py-1.5 rounded-full hover:bg-gold-500 hover:text-plum-950 transition-all font-medium flex items-center gap-1.5">
-                <i class="fa-solid fa-star text-[10px]"></i> Reviews
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-md mx-auto px-4 pt-6 space-y-6">
-
-        <!-- Banner / Welcome Note -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-plum-800 to-plum-900 border border-gold-500/30 p-5 shadow-2xl">
-            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-gold-500/10 rounded-full blur-2xl pointer-events-none"></div>
-            <h2 class="text-xl font-bold text-gold-400 mb-1">Exclusive Collection</h2>
-            <p class="text-xs text-neutral-300 leading-relaxed mb-4">Tap any piece to inquire or order securely & discreetly via WhatsApp.</p>
-            <div class="flex items-center gap-2 text-[11px] text-gold-500/90 font-medium bg-plum-950/50 py-1.5 px-3 rounded-lg border border-gold-500/20 w-fit">
-                <i class="fa-solid fa-shield-halved"></i> 100% Confidential Delivery & Packaging
-            </div>
-        </div>
-
-        <!-- Product Feed -->
-        <div id="product-container" class="space-y-6">
-            <!-- Dynamic Products Injected via JS -->
-        </div>
-
-    </main>
-
-    <!-- Reviews Modal -->
-    <div id="reviews-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div class="bg-plum-900 w-full max-w-lg max-h-[85vh] rounded-t-3xl sm:rounded-2xl border border-gold-500/30 flex flex-col shadow-2xl overflow-hidden">
-            <div class="p-4 border-b border-plum-800 flex items-center justify-between">
-                <h3 class="font-bold text-gold-400 text-base">Client Experiences</h3>
-                <button onclick="closeReviewsModal()" class="w-8 h-8 rounded-full bg-plum-800 text-neutral-400 hover:text-white flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="p-4 overflow-y-auto space-y-4 flex-1">
-                <!-- Add Review Form -->
-                <form id="review-form" onsubmit="submitReview(event)" class="bg-plum-950/60 p-3.5 rounded-xl border border-gold-500/20 space-y-3">
-                    <h4 class="text-xs font-bold text-gold-400 uppercase tracking-wider">Leave a Review</h4>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-neutral-400">Rating:</span>
-                        <div class="flex gap-1 text-gold-400 cursor-pointer" id="star-rating-input">
-                            <i class="fa-solid fa-star" data-value="1" onclick="setRating(1)"></i>
-                            <i class="fa-solid fa-star" data-value="2" onclick="setRating(2)"></i>
-                            <i class="fa-solid fa-star" data-value="3" onclick="setRating(3)"></i>
-                            <i class="fa-solid fa-star" data-value="4" onclick="setRating(4)"></i>
-                            <i class="fa-solid fa-star" data-value="5" onclick="setRating(5)"></i>
-                        </div>
-                    </div>
-                    <input type="text" id="reviewer-name" placeholder="Your Name or Initials" required class="w-full bg-plum-900 border border-plum-800 rounded-lg px-3 py-2 text-xs text-neutral-100 focus:outline-none focus:border-gold-500">
-                    <textarea id="reviewer-text" placeholder="Share your experience..." rows="2" required class="w-full bg-plum-900 border border-plum-800 rounded-lg px-3 py-2 text-xs text-neutral-100 focus:outline-none focus:border-gold-500 resize-none"></textarea>
-                    <button type="submit" class="w-full py-2 bg-gradient-to-r from-gold-600 to-gold-400 text-plum-950 font-bold rounded-lg text-xs shadow-md">Post Review</button>
-                </form>
-                <!-- Reviews List -->
-                <div id="reviews-list" class="space-y-3">
-                    <!-- Loaded dynamically -->
-                </div>
-            </div>
-        </div>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="EroticaSecrets home">
+      <img src="assets/brand-mark.svg" alt="" class="brand-mark">
+      <span class="brand-word">EROTICA<span>SECRETS</span><small>FIND YOUR DESIRE</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#collection">The collection</a>
+      <a href="#experience">Our promise</a>
+      <a href="#coming-soon">Coming soon</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-button" id="search-toggle" aria-label="Open search"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button>
+      <button class="bag-button" id="bag-open" aria-label="Open shopping bag"><svg viewBox="0 0 24 24"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span>Bag</span><b id="bag-count">0</b></button>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open menu"><span></span><span></span></button>
     </div>
+  </header>
 
-    <!-- Footer -->
-    <footer class="mt-12 text-center text-neutral-500 text-[11px] pb-6">
-        <p>&copy; 2026 Eroticasecrets. All rights reserved.</p>
-        <p class="mt-1 text-gold-500/60">Discreet • Private • Luxurious</p>
-    </footer>
+  <div class="search-panel" id="search-panel" hidden>
+    <div class="search-inner"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="search-input" type="search" placeholder="Search the collection…" autocomplete="off"><button id="search-close" aria-label="Close search">×</button></div>
+  </div>
 
-    <!-- Swiper JS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        // CONFIGURATION: Replace with your actual WhatsApp phone number (Country code + number, no + sign)
-        let whatsappNumber = "254712345678";
+  <main>
+    <section class="hero">
+      <div class="hero-grain"></div>
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> A MORE PERSONAL KIND OF LUXURY</p>
+        <h1>Discover the art<br>of <em>your desire.</em></h1>
+        <p class="hero-intro">A considered collection for curiosity, confidence and connection. Explore at your own pace, in your own way.</p>
+        <div class="hero-cta"><a class="button button-gold" href="#collection">Explore the collection <span>↗</span></a><span class="quiet-note">Private. Discreet. Always yours.</span></div>
+      </div>
+      <div class="hero-art" aria-label="Abstract burgundy and gold botanical artwork">
+        <div class="orb orb-one"></div><div class="orb orb-two"></div>
+        <div class="gold-arc arc-one"></div><div class="gold-arc arc-two"></div>
+        <img src="assets/brand-mark.svg" class="hero-emblem" alt="">
+        <div class="hero-stamp"><span>ES</span><small>EST. WITH INTENTION</small></div>
+        <p class="art-caption">THE ART OF<br>FEELING GOOD</p>
+      </div>
+      <div class="hero-bottom"><span>01 — THE COLLECTION</span><span>SCROLL TO EXPLORE ↓</span></div>
+    </section>
 
-        // Product Catalog Data
-        const products = [
-            {
-                id: 1,
-                title: "Silk Eye Mask & Satin Restraints",
-                price: "KSh 3,500",
-                status: "NEW ARRIVAL",
-                badgeClass: "bg-amber-500/20 text-amber-300 border-amber-500/30",
-                images: [
-                    "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&q=80",
-                    "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80"
-                ]
-            },
-            {
-                id: 2,
-                title: "Luxury Contour Wand & Massage Oil",
-                price: "KSh 6,800",
-                status: "IN STOCK",
-                badgeClass: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-                images: [
-                    "https://images.unsplash.com/photo-1608248597359-974b0870badf?w=600&q=80",
-                    "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80"
-                ]
-            },
-            {
-                id: 3,
-                title: "Velvet Sensory Paddle & Blindfold",
-                price: "KSh 4,200",
-                status: "OUT OF STOCK",
-                badgeClass: "bg-rose-500/20 text-rose-300 border-rose-500/30",
-                images: [
-                    "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=600&q=80"
-                ]
-            }
-        ];
+    <section class="trust-strip" id="experience">
+      <div><span class="trust-icon">✧</span><p><b>Discreet by design</b><small>Your comfort comes first</small></p></div>
+      <div><span class="trust-icon">◇</span><p><b>Chosen with care</b><small>A thoughtful collection</small></p></div>
+      <div><span class="trust-icon">↗</span><p><b>Personal assistance</b><small>We're one message away</small></p></div>
+    </section>
 
-        // Load Click Analytics & Reviews from LocalStorage
-        let clickCounts = JSON.parse(localStorage.getItem('eroticasecrets_clicks') || '{}');
-        let reviews = JSON.parse(localStorage.getItem('eroticasecrets_reviews') || JSON.stringify([
-            { name: "S. K.", rating: 5, text: "Extremely discreet packaging and wonderful quality. Arrived right on time!", date: "Yesterday" },
-            { name: "M. N.", rating: 5, text: "Top-notch customer service on WhatsApp. Very smooth experience.", date: "3 days ago" }
-        ]));
+    <section class="collection section-wrap" id="collection">
+      <div class="section-heading">
+        <div><p class="eyebrow dark-eyebrow">THE EDIT</p><h2>Find what <em>moves you.</em></h2><p class="section-subtitle">Take your time. Your next discovery is just around the corner.</p></div>
+        <span class="collection-count" id="collection-count">0 PIECES</span>
+      </div>
+      <div class="catalogue-tools">
+        <div class="category-tabs" id="category-tabs" aria-label="Filter products">
+          <button class="category-tab active" data-category="All">All pieces</button>
+        </div>
+        <label class="sort-control">SORT BY <select id="sort-select"><option value="featured">Featured</option><option value="newest">New arrivals</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select></label>
+      </div>
+      <div class="product-grid" id="product-grid"></div>
+      <div class="empty-state" id="empty-state">
+        <div class="empty-flower">✧</div><p class="eyebrow dark-eyebrow">A NEW CHAPTER BEGINS</p>
+        <h3>Your collection is taking shape.</h3><p>Our first pieces will be arriving here soon. In the meantime, say hello and we'll help you discover what's available.</p>
+        <a class="text-link" id="empty-whatsapp" href="#" target="_blank" rel="noopener">Ask us on WhatsApp <span>↗</span></a>
+      </div>
+    </section>
 
-        let currentSelectedRating = 5;
+    <section class="editorial">
+      <div class="editorial-art"><div class="editorial-ring"></div><div class="editorial-copy-mark">ES<span>✧</span></div></div>
+      <div class="editorial-text"><p class="eyebrow">A NOTE FROM EROTICASECRETS</p><h2>Made for your<br><em>own kind of magic.</em></h2><p>We believe discovery should feel comfortable, considered and entirely personal. Browse quietly, ask questions freely and choose what feels right for you.</p><a href="#collection" class="text-link light-link">Explore at your pace <span>↗</span></a></div>
+    </section>
 
-        function renderProducts() {
-            const container = document.getElementById('product-container');
-            container.innerHTML = products.map(product => {
-                let clicks = clickCounts[product.id] || 0;
-                let isOutOfStock = product.status === "OUT OF STOCK";
-                
-                let buttonHTML = isOutOfStock 
-                    ? `<button onclick="handleWhatsAppOrder(${product.id}, '${product.title}', true)" class="w-full py-3 bg-plum-800/80 hover:bg-plum-700 text-gold-400 border border-gold-500/30 font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-lg">
-                         <i class="fa-brands fa-whatsapp text-sm"></i> Request Restock Notification
-                       </button>`
-                    : `<button onclick="handleWhatsAppOrder(${product.id}, '${product.title}', false)" class="w-full py-3 bg-gradient-to-r from-gold-600 via-gold-500 to-gold-400 hover:opacity-95 text-plum-950 font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-gold-500/10">
-                         <i class="fa-brands fa-whatsapp text-sm"></i> Order via WhatsApp (${product.price})
-                       </button>`;
+    <section class="coming-section section-wrap" id="coming-soon">
+      <div class="coming-heading"><p class="eyebrow dark-eyebrow">THE STORY CONTINUES</p><h2>More to <em>look forward to.</em></h2><p>New expressions of confidence and style are on their way.</p></div>
+      <div class="coming-grid">
+        <article class="coming-card lingerie"><div class="coming-visual"><span class="coming-symbol">✧</span><span class="coming-tag">COMING SOON</span></div><div><h3>Lingerie</h3><p>Beautiful layers. Your kind of confidence.</p></div></article>
+        <article class="coming-card essentials"><div class="coming-visual"><span class="coming-symbol">◇</span><span class="coming-tag">COMING SOON</span></div><div><h3>Intimate essentials</h3><p>Thoughtful details for everyday indulgence.</p></div></article>
+        <article class="coming-card accessories"><div class="coming-visual"><span class="coming-symbol">✦</span><span class="coming-tag">COMING SOON</span></div><div><h3>Accessories</h3><p>The finishing touches to make it yours.</p></div></article>
+      </div>
+    </section>
 
-                let slidesHTML = product.images.map(img => `
-                    <div class="swiper-slide bg-plum-950">
-                        <img src="${img}" alt="${product.title}" class="w-full h-64 object-cover">
-                    </div>
-                `).join('');
+    <section class="newsletter">
+      <div class="newsletter-flower">✧</div><p class="eyebrow">A LITTLE NOTE, NOW AND THEN</p><h2>Stay close to the <em>good things.</em></h2><p>Ask us about new arrivals, restocks and recommendations. No account needed.</p><a class="button button-outline" id="newsletter-whatsapp" href="#" target="_blank" rel="noopener">Keep me in the loop <span>↗</span></a>
+    </section>
+  </main>
 
-                return `
-                    <div class="bg-plum-900/90 rounded-2xl border border-gold-500/20 overflow-hidden shadow-xl backdrop-blur-sm">
-                        <!-- Image Carousel -->
-                        <div class="swiper product-swiper-${product.id} relative">
-                            <div class="swiper-wrapper">
-                                ${slidesHTML}
-                            </div>
-                            <div class="swiper-pagination"></div>
-                            <div class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider border backdrop-blur-md ${product.badgeClass}">
-                                ${product.status}
-                            </div>
-                        </div>
-                        <!-- Product Info -->
-                        <div class="p-4 space-y-3">
-                            <div class="flex items-start justify-between">
-                                <h3 class="font-bold text-sm text-neutral-100">${product.title}</h3>
-                                <span class="text-gold-400 font-bold text-sm">${product.price}</span>
-                            </div>
-                            ${buttonHTML}
-                            <div class="flex items-center justify-between text-[10px] text-neutral-400 pt-1">
-                                <span><i class="fa-solid fa-fire text-gold-500"></i> ${clicks} inquiries</span>
-                                <span class="text-gold-500/80">Discreet Inquiry</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+  <footer class="site-footer">
+    <a class="footer-brand" href="#"><img src="assets/brand-mark.svg" alt=""><span>EROTICASECRETS<small>FIND YOUR DESIRE</small></span></a>
+    <p>Discover at your own pace. Always with discretion.</p>
+    <div class="footer-links"><a href="#collection">Shop</a><a href="#experience">Our promise</a><a href="#coming-soon">Coming soon</a><a id="footer-whatsapp" href="#" target="_blank" rel="noopener">Contact</a></div>
+    <div class="footer-bottom"><span>© <span id="year"></span> EroticaSecrets. All rights reserved.</span><span>PLEASE SHOP RESPONSIBLY · 18+</span></div>
+  </footer>
 
-            // Initialize Swiper for each product card
-            products.forEach(product => {
-                new Swiper(`.product-swiper-${product.id}`, {
-                    pagination: {
-                        el: `.product-swiper-${product.id} .swiper-pagination`,
-                        clickable: true,
-                    },
-                    loop: product.images.length > 1
-                });
-            });
-        }
+  <div class="mobile-menu" id="mobile-menu" hidden><a href="#collection">The collection</a><a href="#experience">Our promise</a><a href="#coming-soon">Coming soon</a></div>
 
-        function handleWhatsAppOrder(productId, title, isRestock) {
-            // Increment Click Analytics
-            clickCounts[productId] = (clickCounts[productId] || 0) + 1;
-            localStorage.setItem('eroticasecrets_clicks', JSON.stringify(clickCounts));
-            renderProducts();
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <aside class="bag-drawer" id="bag-drawer" aria-label="Shopping bag" aria-hidden="true">
+    <div class="drawer-head"><div><p class="eyebrow dark-eyebrow">YOUR SELECTION</p><h2>Your bag <span id="drawer-count">(0)</span></h2></div><button class="close-button" id="bag-close" aria-label="Close bag">×</button></div>
+    <div class="bag-items" id="bag-items"><div class="bag-empty">Your bag is waiting for something lovely.</div></div>
+    <div class="drawer-foot"><div class="bag-total"><span>Estimated total</span><b id="bag-total">KSh 0</b></div><p>You'll confirm availability, delivery and payment with us on WhatsApp.</p><button class="button button-dark full-button" id="checkout-button">Continue on WhatsApp <span>↗</span></button></div>
+  </aside>
 
-            // Format WhatsApp Message
-            let message = isRestock 
-                ? `Hello Eroticasecrets, I would like to be notified when "${title}" is back in stock.` 
-                : `Hello Eroticasecrets, I would like to order: *${title}*. Please share delivery details.`;
-            
-            let url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
-        }
+  <div class="product-modal-backdrop" id="product-modal-backdrop">
+    <section class="product-modal" id="product-modal" role="dialog" aria-modal="true" aria-label="Product details">
+      <button class="close-button modal-close" id="modal-close" aria-label="Close details">×</button>
+      <div class="modal-content" id="modal-content"></div>
+    </section>
+  </div>
 
-        function openReviewsModal() {
-            document.getElementById('reviews-modal').classList.remove('hidden');
-            renderReviews();
-        }
-
-        function closeReviewsModal() {
-            document.getElementById('reviews-modal').classList.add('hidden');
-        }
-
-        function setRating(rating) {
-            currentSelectedRating = rating;
-            const stars = document.querySelectorAll('#star-rating-input i');
-            stars.forEach((star, index) => {
-                if (index < rating) {
-                    star.classList.remove('fa-regular');
-                    star.classList.add('fa-solid');
-                } else {
-                    star.classList.remove('fa-solid');
-                    star.classList.add('fa-regular');
-                }
-            });
-        }
-
-        function submitReview(event) {
-            event.preventDefault();
-            const name = document.getElementById('reviewer-name').value;
-            const text = document.getElementById('reviewer-text').value;
-
-            reviews.unshift({
-                name: name,
-                rating: currentSelectedRating,
-                text: text,
-                date: "Just now"
-            });
-
-            localStorage.setItem('eroticasecrets_reviews', JSON.stringify(reviews));
-            document.getElementById('review-form').reset();
-            setRating(5);
-            renderReviews();
-        }
-
-        function renderReviews() {
-            const list = document.getElementById('reviews-list');
-            list.innerHTML = reviews.map(rev => {
-                let starsHTML = '';
-                for(let i=0; i<5; i++) {
-                    starsHTML += `<i class="fa-solid fa-star ${i < rev.rating ? 'text-gold-400' : 'text-neutral-700'} text-[10px]"></i>`;
-                }
-                return `
-                    <div class="bg-plum-950/40 border border-plum-800 rounded-xl p-3 space-y-1">
-                        <div class="flex items-center justify-between">
-                            <span class="font-bold text-xs text-neutral-200">${rev.name}</span>
-                            <span class="text-[10px] text-neutral-500">${rev.date}</span>
-                        </div>
-                        <div class="flex gap-0.5">${starsHTML}</div>
-                        <p class="text-xs text-neutral-300 pt-1">${rev.text}</p>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Initial render on load
-        renderProducts();
-        setRating(5);
-    </script>
+  <div class="age-overlay" id="age-overlay">
+    <div class="age-card"><img src="assets/brand-mark.svg" alt="" class="age-mark"><p class="eyebrow">WELCOME TO EROTICASECRETS</p><h2>A space for <em>grown-up discovery.</em></h2><p>This website is intended for adults aged 18 and over. Please confirm that you are at least 18 to continue.</p><div class="age-actions"><button class="button button-gold" id="age-yes">I am 18 or older</button><button class="age-exit" id="age-no">I am under 18</button></div><small>By entering, you agree to browse responsibly.</small></div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="products.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
