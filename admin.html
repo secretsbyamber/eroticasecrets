@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Login | EroticaSecrets</title>
+
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="admin.css">
+</head>
+
+<body class="admin-body">
+
+  <main class="login-page">
+
+    <section class="login-card">
+
+      <div class="login-brand">
+        <span class="brand-mark">ES</span>
+        <p class="brand-name">EroticaSecrets</p>
+        <span class="brand-subtitle">PRIVATE ADMINISTRATION</span>
+      </div>
+
+      <div class="login-heading">
+        <h1>Welcome Back</h1>
+        <p>Sign in to manage your store.</p>
+      </div>
+
+      <form id="login-form">
+
+        <div class="form-group">
+          <label for="admin-email">Email Address</label>
+          <input
+            type="email"
+            id="admin-email"
+            name="email"
+            placeholder="Enter your admin email"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="admin-password">Password</label>
+          <input
+            type="password"
+            id="admin-password"
+            name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button type="submit" id="login-button">
+          Sign In
+        </button>
+
+        <p id="login-message" class="login-message" role="status" aria-live="polite"></p>
+
+      </form>
+
+      <div class="login-footer">
+        <span>Authorised access only</span>
+        <a href="./index.html">Return to Store</a>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Supabase library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Your Supabase connection -->
+  <script src="js/supabase-config.js"></script>
+
+  <!-- Admin login functionality -->
+  <script src="admin.js"></script>
+
+</body>
+</html>
