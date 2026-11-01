@@ -128,20 +128,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // LOAD REVIEWS
   // -----------------------------------------
 
-  async function loadReviews() {
+ async function loadReviews() {
     const { data, error } = await supabaseClient
       .from("reviews")
-      .select("*");
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Reviews loading error:", error);
       currentReviews = [];
       document.getElementById("stat-reviews").textContent = "—";
+      showNotice("Unable to load customer reviews.", true);
       return;
     }
 
     currentReviews = data || [];
+
     updateReviewStatistics();
+    renderReviews();
   }
 
   // -----------------------------------------
@@ -175,6 +179,183 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("stat-reviews").textContent = pending;
   }
+   
+  // -----------------------------------------
+  // REVIEW MANAGEMENT
+  // -----------------------------------------
+
+  let activeReviewFilter = "pending";
+
+  function renderReviews() {
+    const container = document.getElementById("reviews-container");
+     addReviewStyles();
+
+    const counts = {
+      pending: currentReviews.filter(review => review.status === "pending").length,
+      approved: currentReviews.filter(review => review.status === "approved").length,
+      rejected: currentReviews.filter(review => review.status === "rejected").length
+    };
+
+    const filteredReviews = currentReviews.filter(
+      review => review.status === activeReviewFilter
+    );
+
+    const tabs = `
+      <div class="review-filter-tabs">
+        ${["pending", "approved", "rejected"].map(status => `
+          <button type="button"
+            class="review-filter ${activeReviewFilter === status ? "active" : ""}"
+            data-review-filter="${status}">
+            ${status.charAt(0).toUpperCase() + status.slice(1)}
+            <span>${counts[status]}</span>
+          </button>
+        `).join("")}
+      </div>
+    `;
+
+    if (!filteredReviews.length) {
+      container.innerHTML = `
+        ${tabs}
+        <div class="dashboard-panel review-empty">
+          <h3>No ${activeReviewFilter} reviews</h3>
+          <p>Customer reviews with this status will appear here.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const cards = filteredReviews.map(review => {
+      const product = currentProducts.find(
+        item => String(item.id) === String(review.product_id)
+      );
+
+      const customerName = review.customer_nam || "Anonymous customer";
+      const productName = product ? product.name : "Product unavailable";
+      const rating = Math.min(5, Math.max(0, Number(review.rating) || 0));
+      const stars = "★".repeat(rating) + "☆".repeat(5 - rating);
+      const date = review.created_at
+        ? new Date(review.created_at).toLocaleString("en-KE", {
+            dateStyle: "medium",
+            timeStyle: "short"
+          })
+        : "Date unavailable";
+
+      return `
+        <article class="review-card">
+          <div class="review-card-top">
+            <div>
+              <h3>${escapeHTML(customerName)}</h3>
+              <p>${escapeHTML(productName)}</p>
+            </div>
+            <span class="review-status ${escapeHTML(review.status)}">
+              ${escapeHTML(review.status)}
+            </span>
+          </div>
+
+          <div class="review-rating" aria-label="${rating} out of 5 stars">
+            ${stars}
+          </div>
+
+          <p class="review-message">${escapeHTML(review.review_text)}</p>
+
+          <small class="review-date">Submitted: ${escapeHTML(date)}</small>
+
+          <div class="review-actions">
+            ${review.status !== "approved" ? `
+              <button type="button" class="review-approve"
+                data-review-action="approved"
+                data-review-id="${escapeHTML(review.id)}">
+                Approve
+              </button>
+            ` : ""}
+
+            ${review.status !== "rejected" ? `
+              <button type="button" class="review-reject"
+                data-review-action="rejected"
+                data-review-id="${escapeHTML(review.id)}">
+                Reject
+              </button>
+            ` : ""}
+
+            <button type="button" class="review-delete"
+              data-review-action="delete"
+              data-review-id="${escapeHTML(review.id)}">
+              Delete
+            </button>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    container.innerHTML = `${tabs}<div class="review-card-list">${cards}</div>`;
+  }
+
+  async function updateReviewStatus(reviewId, newStatus) {
+    try {
+      const { error } = await supabaseClient
+        .from("reviews")
+        .update({ status: newStatus })
+        .eq("id", reviewId);
+
+      if (error) throw error;
+
+      await loadReviews();
+
+      showNotice(`Review ${newStatus} successfully.`);
+    } catch (error) {
+      console.error("Review update error:", error);
+      showNotice(error.message || "Unable to update review.", true);
+    }
+  }
+
+  async function deleteReview(reviewId) {
+    const confirmed = window.confirm(
+      "Permanently delete this customer review? This cannot be undone."
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const { error } = await supabaseClient
+        .from("reviews")
+        .delete()
+        .eq("id", reviewId);
+
+      if (error) throw error;
+
+      await loadReviews();
+      showNotice("Review deleted successfully.");
+    } catch (error) {
+      console.error("Review deletion error:", error);
+      showNotice(error.message || "Unable to delete review.", true);
+    }
+  }
+
+  document.getElementById("reviews-container")
+    .addEventListener("click", event => {
+      const filterButton = event.target.closest("[data-review-filter]");
+
+      if (filterButton) {
+        activeReviewFilter = filterButton.dataset.reviewFilter;
+        renderReviews();
+        return;
+      }
+
+      const actionButton = event.target.closest("[data-review-action]");
+      if (!actionButton) return;
+
+      const reviewId = actionButton.dataset.reviewId;
+      const action = actionButton.dataset.reviewAction;
+
+      if (action === "approved" || action === "rejected") {
+        updateReviewStatus(reviewId, action);
+      }
+
+      if (action === "delete") {
+        deleteReview(reviewId);
+      }
+    });
+
 
   // -----------------------------------------
   // PRODUCT TABLE
@@ -550,6 +731,173 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.head.appendChild(style);
   }
+   
+  // -----------------------------------------
+  // REVIEW SECTION STYLES
+  // -----------------------------------------
+
+  function addReviewStyles() {
+    if (document.getElementById("review-styles")) return;
+
+    const style = document.createElement("style");
+    style.id = "review-styles";
+
+    style.textContent = `
+      .review-filter-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .review-filter {
+        border: 1px solid #e5d8d2;
+        background: #fffaf7;
+        color: #54283d;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .review-filter.active {
+        background: #54283d;
+        color: #ffffff;
+        border-color: #54283d;
+      }
+
+      .review-filter span {
+        display: inline-block;
+        margin-left: 6px;
+        padding: 2px 7px;
+        border-radius: 20px;
+        background: rgba(190, 151, 83, 0.2);
+      }
+
+      .review-card-list {
+        display: grid;
+        gap: 16px;
+      }
+
+      .review-card {
+        background: #fffaf7;
+        border: 1px solid #eaded8;
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      .review-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .review-card-top h3 {
+        margin: 0 0 5px;
+        color: #54283d;
+      }
+
+      .review-card-top p {
+        margin: 0;
+        color: #786b70;
+      }
+
+      .review-status {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        text-transform: capitalize;
+        font-weight: 700;
+      }
+
+      .review-status.pending {
+        background: #fff0cf;
+        color: #805600;
+      }
+
+      .review-status.approved {
+        background: #e1f3e5;
+        color: #236b36;
+      }
+
+      .review-status.rejected {
+        background: #fbe4e4;
+        color: #9a2929;
+      }
+
+      .review-rating {
+        color: #bd9145;
+        letter-spacing: 3px;
+        font-size: 19px;
+        margin: 14px 0;
+      }
+
+      .review-message {
+        color: #463c40;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      .review-date {
+        display: block;
+        color: #8a7d82;
+        margin-top: 12px;
+      }
+
+      .review-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 18px;
+      }
+
+      .review-actions button {
+        border: 0;
+        border-radius: 7px;
+        padding: 9px 14px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .review-approve {
+        background: #e1f3e5;
+        color: #236b36;
+      }
+
+      .review-reject {
+        background: #fbe4e4;
+        color: #9a2929;
+      }
+
+      .review-delete {
+        background: #eee9e7;
+        color: #55484d;
+      }
+
+      .review-empty {
+        padding: 28px;
+        text-align: center;
+        border: 1px solid #eaded8;
+        border-radius: 12px;
+        background: #fffaf7;
+      }
+
+      @media (max-width: 600px) {
+        .review-card {
+          padding: 15px;
+        }
+
+        .review-card-top {
+          flex-direction: column;
+        }
+      }
+    `;
+
+    document.head.appendChild(style);
+  }
+
 
   // -----------------------------------------
   // STOCK ADJUSTMENT
