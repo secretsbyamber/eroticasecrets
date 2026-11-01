@@ -215,7 +215,7 @@
           )
           .map(review => ({
             approved: true,
-            name: review.customer_nam || "Customer",
+            name: review.customer_name?.trim() || "Anonymous customer",
             rating: review.rating,
             text: review.review_text || "",
             date: review.created_at
