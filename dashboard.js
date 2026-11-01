@@ -229,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
         item => String(item.id) === String(review.product_id)
       );
 
-      const customerName = review.customer_nam || "Anonymous customer";
+      const customerName = review.customer_name?.trim() || "Anonymous customer";
       const productName = product ? product.name : "Product unavailable";
       const rating = Math.min(5, Math.max(0, Number(review.rating) || 0));
       const stars = "★".repeat(rating) + "☆".repeat(5 - rating);
