@@ -133,7 +133,7 @@ window.EROTICA_PRODUCTS = [
    // 4. PURPLE ROSE need to update
   {
     id: "rose-003",
-    name: "Rose (red)",
+    name: "Rose (purple)",
     category: "Intimate Wellness",
     price: 1500,
     status: "available",
